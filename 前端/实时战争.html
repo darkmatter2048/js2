@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<!-- 定义文档类型为HTML5 -->
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title> <!-- 引入ECharts主库 -->
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+    <!-- 引入ECharts GL扩展库，用于三维图形渲染 -->
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts-gl.min.js"></script>
+    <!-- 引入ECharts世界地图数据 -->
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/maps/world.js"></script>
+    <!-- 引入ECharts“粉笔”主题文件 -->
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/themes/chalk.js"></script>
+    <!-- 自定义页面样式 -->
+    <link rel="stylesheet" href="../font/iconfont.css">
+    <link rel="stylesheet" href="../css/all.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            list-style: none;
+        }
+
+        @font-face {
+            font-family: 'font';
+            src: url(../font/xiangcuikesong.ttf);
+        }
+
+        html,
+        body {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #293441;
+            overflow: hidden;
+        }
+
+        .box {
+            height: 100%;
+            /* 盒子高度为100% */
+        }
+
+        .main__left {
+            position: absolute;
+            left: 0;
+            z-index: 999;
+            width: 30vw;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .main__left .title {
+            font-size: 70px;
+            height: 50%;
+            width: 80%;
+            text-align: center;
+            transform: translate(-30px, 50px);
+            color: #c05700;
+        }
+
+        .main__left .title h2 {
+            text-align: center;
+            font-family: 'font';
+        }
+
+
+        .data {
+            width: 100%;
+            height: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .data .box {
+            width: 80%;
+            height: 50px;
+            margin: 5px;
+
+            display: flex;
+        }
+
+        .data .box div {
+            width: 80px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .data .box div::before {
+            content: '';
+            width: 100%;
+            height: 10px;
+            position: absolute;
+            border-radius: 10px;
+            right: -150px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .conflict {
+            background-color: #df2e00;
+        }
+
+        .civil-war {
+            background-color: #c05700;
+        }
+
+        .ethnic-war {
+            background-color: #0083b4;
+        }
+
+        .drug-war {
+            background-color: #a757bc;
+        }
+
+        .rebellion {
+            background-color: #fb0085;
+        }
+
+        .stable {
+            background-color: #00920d;
+        }
+
+        .conflict::before {
+            background-color: #df2e00;
+        }
+
+        .civil-war::before {
+            background-color: #c05700;
+        }
+
+        .ethnic-war::before {
+            background-color: #0083b4;
+        }
+
+        .drug-war::before {
+            background-color: #a757bc;
+        }
+
+        .rebellion::before {
+            background-color: #fb0085;
+        }
+
+        .stable::before {
+            background-color: #00920d;
+        }
+
+        .data h2 {
+            line-height: 50px;
+            text-align: center;
+            display: block;
+            position: absolute;
+            border-radius: 10px;
+            left: 350px;
+            color: #fff;
+        }
+
+
+        :root {
+            --rotate-speed: 40;
+            --count: 8;
+            --easing: cubic-bezier(0.000, 0.37, 1.000, 0.63);
+        }
+
+        .main__right {
+            position: absolute;
+            right: 0;
+            width: 30vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 999;
+        }
+
+        /* 设置容器样式 */
+        .void {
+            width: 100%;
+            margin: auto;
+            position: relative;
+            height: 100%;
+            width: 50vw;
+            transform: translateX(-22vw);
+        }
+
+        /* 鼠标悬停时暂停动画 */
+        /* ul:hover * {
+            animation-play-state: paused;
+        } */
+
+        /* 设置列表样式 */
+        .main__right ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            z-index: 1;
+        }
+
+        /* 设置列表项样式 */
+        .main__right li {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            animation: rotateCW calc(var(--rotate-speed) * 1s) var(--easing) infinite;
+        }
+
+        /* 设置卡片样式 */
+        .card {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 16px 24px;
+            gap: 8px;
+            background: #53e4fad5;
+            box-shadow: 0px 4px 12px rgba(70, 0, 255, 0.1),
+                0px 16px 32px rgba(165, 135, 255, 0.1);
+            border-radius: 12px;
+            font: 400 14px '';
+            color: #535062;
+            cursor: pointer;
+            animation: rotateCCW calc(var(--rotate-speed) * 1s) var(--easing) infinite;
+        }
+
+        /* 设置图片样式 */
+        .card img {
+            width: 100%;
+        }
+
+
+        /* 设置模型名称样式 */
+        .model-name {
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 150%;
+            color: #3B2ED0;
+            display: block;
+            letter-spacing: 3px;
+            color: #ffffff;
+        }
+
+        /* 设置不同列表项的动画延迟 */
+        li:nth-child(2),
+        li:nth-child(2) .card {
+            animation-delay: calc((var(--rotate-speed)/var(--count)) * -1s);
+        }
+
+        li:nth-child(3),
+        li:nth-child(3) .card {
+            animation-delay: calc((var(--rotate-speed)/var(--count)) * -2s);
+        }
+
+        li:nth-child(4),
+        li:nth-child(4) .card {
+            animation-delay: calc((var(--rotate-speed)/var(--count)) * -3s);
+        }
+
+        li:nth-child(5),
+        li:nth-child(5) .card {
+            animation-delay: calc((var(--rotate-speed)/var(--count)) * -4s);
+        }
+
+        li:nth-child(6),
+        li:nth-child(6) .card {
+            animation-delay: calc((var(--rotate-speed)/var(--count)) * -5s);
+        }
+
+        /* 定义顺时针旋转动画 */
+        @keyframes rotateCW {
+            from {
+                transform: translate3d(0px, -50%, -1px) rotate(-45deg);
+            }
+
+            to {
+                transform: translate3d(0px, -50%, 0px) rotate(-315deg);
+            }
+        }
+
+        /* 定义逆时针旋转动画 */
+        @keyframes rotateCCW {
+            from {
+                transform: rotate(45deg);
+            }
+
+            to {
+                transform: rotate(315deg);
+            }
+        }
+
+        /* 设置中心圆样式 */
+        .center-circle {
+            position: absolute;
+            width: 230px;
+            aspect-ratio: 1 / 1;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background-size: cover;
+            background-position: -35px 0;
+        }
+
+
+        /* 设置裁剪样式 */
+        .crop {
+            -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0),
+                    rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1));
+        }
+
+        /* 设置遮罩样式 */
+        .mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 50%;
+            background-position: 100% 50%;
+            background-repeat: no-repeat;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 73vw;
+            height: 80vh;
+            background-color: #333;
+            background-image: url(../img/1.jpg);
+            background-size: cover;
+            /* 暗色背景 */
+            color: white;
+            display: none;
+            z-index: 99999;
+
+            border-radius: 10px;
+            /* 圆角边框 */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            /* 阴影效果 */
+            overflow-x: hidden;
+            /* 防止内容溢出 */
+            text-align: center;
+            /* 文本居中 */
+            padding: 20px;
+            /* 内边距 */
+        }
+
+        .modal-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-content h2 {
+            margin: 15px 0;
+            font-size: 2em;
+            font-weight: bold;
+            position: absolute;
+            top: 50px;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            /* 限制图片宽度 */
+            max-height: 50vh;
+            /* 限制图片高度 */
+            margin: 10px 0;
+            margin-top: 120px;
+        }
+
+        .modal-content p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            width: 80%;
+            padding: 0 20px;
+            margin: 10px;
+            /* 文本内边距 */
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 99999;
+
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+ 
+    </style>
+</head>
+
+<body>
+    <button id="openVideoBtn"><img src="../img/video.png" alt=""></button>
+
+    <!-- 遮罩层 -->
+    <div id="overlay" style="display:none;"></div>
+
+    <!-- 视频容器 -->
+    <div id="videoContainer" style="display:none;">
+        <video id="videoPlayer" controls>
+            <source src="../首页示例.mp4" type="video/mp4">
+        </video>
+        <!-- 关闭按钮 -->
+        <button id="closeVideoBtn">×</button>
+    </div>
+
+    <nav>
+        <ul>
+            <li><i class="iconfont icon-wxbzhuye"></i><a href="首页.html">首页</a></li>
+            <li><i class="iconfont icon-diqiu"></i><a href="实时战争.html">实时战争</a></li>
+            <li><i class="iconfont icon-yiliaofuwu"></i><a href="../book/Flip Blockbook.js/book.html">援助统计</a></li>
+            <li><i class="iconfont icon-li_skull"></i><a href="死亡数据.html">死亡情况</a></li>
+        </ul>
+    </nav>
+    <div class="main__left">
+        <div class="title">
+            <h2>战争</h2>
+            <h2>离我们</h2>
+            <h2>真的远吗</h2>
+
+        </div>
+        <div class="data">
+            <div class="box">
+                <div class="conflict"></div>
+                <h2>冲突战争</h2>
+            </div>
+            <div class="box">
+                <div class="civil-war"></div>
+                <h2>内战</h2>
+            </div>
+            <div class="box">
+                <div class="drug-war"></div>
+                <h2>毒品战争</h2>
+            </div>
+            <div class="box">
+                <div class="stable"></div>
+                <h2>稳定地区</h2>
+            </div>
+            </tbody>
+        </div>
+    </div>
+    <div class="main__right">
+        <div class="void" id="void">
+            <div class="crop">
+                <ul id="card-list" style="--count: 6;">
+                    <li>
+                        <a href="https://events.baidu.com/search/vein?platform=pc&record_id=1585&query=%E4%BF%84%E7%BD%97%E6%96%AF%E4%B9%8C%E5%85%8B%E5%85%B0%E5%86%B2%E7%AA%81%E4%BA%8B%E4%BB%B6%E8%BF%9B%E5%B1%95%E6%83%85%E5%86%B5&srcid=50367">
+                        <div class="card" >
+                            <span class="model-name">俄乌战争</span>
+                            <span>开始时间：2022年2月24日
+                                <br/>参战双方：俄罗斯 乌克兰
+                            </span>
+                        </div>
+                    </a>
+                    </li>
+                    <li>
+                        <a href="https://events.baidu.com/search/vein?platform=pc&record_id=831&query=%E5%B7%B4%E4%BB%A5%E5%86%B2%E7%AA%81%E6%9C%80%E6%96%B0%E6%B6%88%E6%81%AF&srcid=50367">
+                        <div class="card" >
+                            <span class="model-name">巴以冲突</span>
+                            <span>开始时间：2023年10月7日
+                                <br/>参战双方：巴勒斯坦 以色列
+                            </span>
+                        </div>
+                    </a>
+                    </li>
+                    <li>
+                        <a href="https://chinese.aljazeera.net/news/political/liveblog/2024/4/19/%E4%BB%A5%E8%89%B2%E5%88%97%E4%B8%8E%E4%BC%8A%E6%9C%97%E7%B4%A7%E5%BC%A0%E5%B1%80%E5%8A%BF%E7%9A%84%E4%BB%8A%E6%97%A5%E5%8F%91%E5%B1%95%E4%BC%8A%E6%96%AF%E6%B3%95%E7%BD%95%E9%98%B2%E7%A9%BA ">
+                        <div class="card" >
+                            <span class="model-name">伊以冲突</span>
+                            <span>开始时间：2024年4月1日
+                                <br/>参战双方：伊朗 以色列
+                            </span>
+                        </div>
+                    </a>
+                    </li>
+                    <li>
+                        <a href="https://chinese.aljazeera.net/where/%e4%b9%9f%e9%97%a8/">
+                        <div class="card" >
+                            <span class="model-name">也门冲突</span>
+                            <span>开始时间：1990年
+                                <br/>参战双方：也门政府 胡塞武装
+                            </span>
+                        </div>
+                    </a>
+                    </li>
+                    <li>
+                        <div class="card" data-target="modal5">
+                            <span class="model-name">内战</span>
+                            <span>主要涉及国家：阿富汗 叙利亚 缅甸
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="card" data-target="modal6">
+                            <span class="model-name">毒品战争</span>
+                            <span>主要涉及国家：墨西哥 哥伦比亚 
+                            </span>
+                        </div>
+                    </li>
+
+
+                </ul>
+            </div>
+            <div class="mask"></div>
+            <div class="center-circle"></div>
+        </div>
+    </div>
+    <!-- 模态框元素 -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h2>俄乌战争</h2>
+            <img src="../实时战争资料/俄乌战争/图二.jpg" alt="Image 1">
+            <p>时间：2022年4月6日-至今<br />战争阶段：<br /><br />第一阶段：2022年2月24日至2月底，企图围绕乌克兰首都基辅城市展开攻防战
+
+                无论高技术条件下局部战争还是信息化条件下局部战争，交战双方都强调以快制快、打击要害、速战速决，迅速达成战争之目的。据外媒报道，俄乌冲突伊始，俄军就直接针对基辅制定了两套作战方案：第一、伞兵突击部队空降基辅，4小时内占领总统府和电视台，并向全境广播泽连斯基政府已投降；第二、装甲兵团预计用3天时间完成对基辅的合围，同时展开大规模炮击，用强大的军事威慑迫使乌克兰妥协屈服。然而，俄罗斯军事行动计划很完美，但执行未果。2022年2月24日，俄军接连派出三波伞兵空降基辅安东诺夫机场，但都遭遇乌克兰重兵包围，损失惨重。很快，乌军便夺回机场控制权，并炸毁跑道，断绝俄军后续支援。在空降奇袭无法奏效后，俄军就开始执行第二套方案，装甲部队分兵多路沿着公路在乌克兰境内实施传统式的快速纵深穿插过程中，乌克兰出动无人机和地面部队袭击俄罗斯保障补给线，破坏了通往基辅的重要道路桥梁，俄军出现了后勤保障脱节的问题，只能暂缓进攻。此后，俄军不得不频频出动有人驾驶战斗机和武装直升机在其地面穿插部队上空搜索并对乌克兰小股兵力进行空中火力打击，但实际效果并不理想。
+                
+                <br /><br />第二阶段：2022年3月至8月底，俄乌展开激烈的城市攻防巷战，乌克兰出动无人机袭击黑海舰队
+                
+                2022年3月至8月，俄罗斯军事打击行动主要围绕乌克兰主要城市、军事设施而展开。每当前线俄军有了最新的部署之后，五角大楼便会做出调整，对乌克兰援助合适的武器装备。
+                
+                2022年5月30日，俄罗斯国防部称，俄军打击了乌克兰多个军事目标。乌克兰方面则表示，俄军继续在乌克兰东部发动进攻，其中战斗已经从该市郊区推到了城区，目前正在进行巷战。2022年6月以来，俄乌战事焦点集中在乌克兰东部顿巴斯地区，两军在北顿涅茨克市继续巷战。乌克兰总统泽连斯基2022年6月12日表示，俄罗斯的关键战术目标没有改变，俄军正在向北顿涅茨克施压，那里正在发生激烈的战斗。2022年6月下旬，俄乌战事焦点集中在乌克兰东部顿巴斯地区，两军在北顿涅茨克市继续进行激烈的巷战。
+                
+                同时，乌军也把俄军黑海舰队作为重点袭击目标，致使黑海舰队战斗力遭受损失。2022年3月19日，俄罗斯方面宣布了一名高级指挥官阵亡的消息——俄军黑海舰队副司令员安德烈·帕利在马里乌波尔附近战死。俄军黑海舰队旗舰、万吨级导弹巡洋舰“莫斯科”号2022年4月中旬起火引发弹药爆炸，舰体严重受损，随后沉没。2022年7月31日，俄罗斯在庆祝海军成立326周年之际，黑海舰队总部遭到了一架来自乌克兰无人机的袭击。
+                
+                <br /> <br />第三阶段：2022年9月至10月初，乌军由防御开始反攻，致使俄军陷入混乱后被迫撤离
+                
+                2022年9月初，乌克兰开始反攻，接连收复哈尔科夫和红利曼，迫使俄军撤退。俄罗斯军事博客给出了俄军在赫尔松撤退的三个原因：缺乏轮换/疲惫；由于缺乏步兵，城镇据点不好守；乌军在城镇之间推进中侦察发现了俄军撤退线路中薄弱环节，就乘虚而入、攻其不备。
+                
+                2022年9月15日后，乌军在哈尔科夫以及东部地区反攻，夺回俄罗斯军队已经占领的部分城镇地区。</p>
+                <img src="../实时战争资料/俄乌战争/图三.webp" alt="Image 1">
+                <p>
+                    <br /><br />第四阶段：俄军调整部署、重整旗鼓，在乌克兰境内东部、南部正式开战
+                
+                俄罗斯为什么调整部署：一是乌军得到西方大量的武器援助，在火力上不比俄军差，依靠数量优势和不计损失的反攻，取得奇效，这个在俄乌双方伤亡对比上可以看出，乌军拿下红利曼，损失是俄军的几倍。再就是，乌军中有大量的西方雇佣兵，这些雇佣兵都在战场上爬滚多年，经验非常丰富，装备精良。同时俄军也稳住了阵脚，随着俄军预备役部队赶来，俄乌双方在红利曼展开激烈争夺。
+                
+                <br /><br />第五阶段，俄罗斯换将变战术，使用无人机、巡航导弹打击乌克兰能源基础设施
+                
+                2022年10月8日早晨发生卡车爆炸事故的克里米亚大桥公路桥恢复通车，俄罗斯国防部长绍伊古任命谢尔盖·苏罗维金为俄对乌开展特别军事行动区域联合部队总指挥。
+                
+                10月10日，俄乌两军在顿巴斯地区、赫尔松州和扎波罗热州展开阵地战的背景下，俄军改变打法开始使用自杀式无人机与巡航导弹袭击乌克兰多个城市军事目标和能源基础设施。2022年11月10日后，俄军撤出南部城市赫尔松后，还继续把乌克兰城市能源基础设施作为重要打击目标，包括军民两用基础设施。
+                
+                俄军首次使用无人机蜂群，出动“天竺葵”-2无人机对位于尼古拉耶夫州奥恰科夫的乌军目标实施了密集打击。据俄罗斯卫星通讯社报道，俄罗斯国防部10月14日发布消息表示，俄空天军对基辅州、哈尔科夫州军事指挥和能源设施进行了打击。俄国防部还表示，俄军使用海基远程高精度武器摧毁了利沃夫州布罗德居民点一处军火库，那里存有从西方国家运来的大量武器、军事装备和弹药。
+                
+                
+                <br /><br />第六阶段：2023年至今，俄乌双方都为春季攻防做准备，在和谈目标上南辕北辙，加之美西方不停“拱火浇油”，冲突复杂化趋势更加明显
+                
+                2023年1月1日跨年夜，乌克兰炮兵向俄军在马克耶夫卡地区的一个临时部署点发射了6枚“海马斯”火箭弹，其中两枚被防空系统拦截，4枚装有杀伤爆破弹头的火箭弹击中俄罗斯军人所在的建筑物，造成89名俄军死亡，其中包括一名副团长。2023年1月11日俄国防部称，俄武装力量总参谋长格拉西莫夫被任命为俄对乌开展特别军事行动区域联合部队总指挥，苏罗维金（2022年10月8日上任的总指挥）、俄罗斯陆军总司令奥列格·萨留科夫、俄武装力量副总参谋长阿列克谢·基姆被任命为俄对乌开展特别军事行动区域联合部队副总指挥。
+                
+                由此可见，自从2022年9月乌军在赫尔松州和哈尔科夫州西部发起反击后，乌克兰在领土收复方面未获进展。尽管俄军对乌基础设施的打击加剧停水、停电、停供暖等问题，但乌方受此前“收复失地”的鼓舞，不断尝试发起新的进攻，加大对萨拉托夫、别尔哥罗德、克里米亚等地的袭击力度，包括对俄战略轰炸机基地——恩格斯空军基地等重要目标的无人机攻击，战斗意志并未消沉。
+                </p>
+            <img src="../实时战争资料/俄乌战争/图四.png" alt="Image 1">
+            <p>
+                未来形势分析<br />
+                <br />乌军要想突破俄军阵地就得依靠坦克。乌克兰总统泽连斯基2022年12月下旬访问美国敲定美向乌提供“爱国者”防空导弹系统等事宜回国后，寻求欧洲金融支持和能源援助、发表各种提振士气的视频讲话，旨在争取“外援”、提升“内力”。乌克兰国防部长列兹尼科夫2023年2月20日表示，乌克兰武装部队计划至少组建两个配备德国“豹2”坦克的坦克营以及另外6至7个使用老式“豹1”的坦克营。列兹尼科夫表示，乌克兰希望在2023年4月前收到“豹2”坦克，但其交付还将取决于乌克兰武装部队人员的培训进度。此外，乌克兰还会得到“挑战者2”主战坦克、“艾布拉姆斯”主战坦克以及法国AMX10RC轻型坦克。
+
+                <br />对于未来俄军主攻方向，从目前情况看，西方媒体和战略界普遍预测俄军“春季攻势”的首要攻击焦点将是巴赫穆特。巴赫穆特虽然对俄军攻占顿巴斯地区的全局战事具有的影响有限，但具有相当的象征性意义，毕竟双方围绕巴赫穆特的争夺已超过半年。对于俄军来说，拿下巴赫穆特，不仅能够为下一步进军斯拉维扬斯克等城市奠定基础，能更有效打击乌军士气。然而，巴赫穆特之战注定将非常艰苦，该地的攻防战，将是外界观察未来冲突走向的一个重要视角。
+
+                <br />相较于俄罗斯媒体关于对乌军事行动的乐观估计，西方战略界则普遍认为，俄乌冲突不太可能在今年结束。尽管双方都在各自准备攻势行动，但战事出现“一边倒”的可能性并不大。双方都难以获得明显胜势、保持持久僵持将是大概率事件，即俄军难以再占领新土地，乌军也难以夺回被俄军控制的更多领土。任何一方依靠战场的绝对胜利来结束冲突的可能性几乎不存在，唯有通过谈判才能结束冲突。
+
+            </p>
+        </div>
+    </div>
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <h2>巴以冲突</h2>
+            <img src="../实时战争资料/巴以战争/1.jpg" alt="Image 1">
+
+            <p>
+                简介<br />
+    巴以（巴勒斯坦和以色列）冲突（The Israeli Palestinian Conflict）是中东冲突的热点之一，为阿以冲突及中东战争的一部分。巴以冲突不能够简单地概括为所有以色列犹太人与所有巴勒斯坦阿拉伯人之间的双边冲突。在争端双方的族群里，有些个人和团体呼吁完全消灭对方；现时国际的共识是支持两国方案；亦有些支持一国方案——建立一个包括现在的以色列、约旦河西岸地区、加沙地带和东耶路撒冷在内、种族及宗教地位平等的世俗国家。 
+
+<br /><br />冲突的背后隐藏着历史根源，既有宗教的、文化的、民族的因素，更重要的是大国干预等外部因素，各种因素互相影响、激化，使得巴以冲突的复杂性非同一般。
+
+<br /><br />其中，两个民族对同一块土地提出了排他性的主权要求是根本原因。犹太移民定居点问题和耶路撒冷地位问题则是巴以和平之路上的严重障碍。这些问题若不解决，巴以冲突就不会停止，中东也难以实现真正的和平。
+
+            </p>
+            <br />
+            <p>
+                巴以冲突之源—圣殿山<br />
+                犹太教古经典这样记载：“世界可以比做人的眼睛，眼白是围填世界的海洋；黑眼珠是住人的大地；瞳孔就是耶路撒冷；瞳孔中的人脸就是圣殿。”因此而得名的耶路撒冷圣殿山，历经沧桑，已成为伊斯兰教第三大圣地。巴以半个多世纪的流血冲突，最大的症结就在于圣城耶路撒冷的地位；而耶城争夺的根源和焦点，则集中在圣殿山的归属。2000年就是因为当时的利库德领导人沙龙闯入这里，引燃了延续至今的巴以冲突。
+            </p>
+            <img src="../实时战争资料/巴以战争/19d8-kpzzqna3598267.png" alt="Image 1">
+            <p>
+                武装组织<br /><br />伊斯兰抵抗运动是在巴勒斯坦被占领土上成立的激进组织，简称“哈马斯”，是由“伊斯兰”、“抵抗”、“运动”3个阿拉伯语词头字母拼写而成。1987年12月由巴勒斯坦人谢赫·艾哈迈德·亚辛创立。
+ 
+                <br />“哈马斯”既是宗教组织，也是政治组织。从宗教上看，哈马斯崇尚伊斯兰传统思想，信仰伊斯兰教义和法则。政治上，它主张恐怖暴力斗争，以武力彻底解放从约旦河西岸到地中海的“全巴勒斯坦”土地，实现建立一个以耶路撒冷为首都的独立的巴勒斯坦国的目标，拒绝承认以色列生存权利。
+                
+            </p>
+            <img src="../实时战争资料/巴以战争/c76c-kpzzqna3598460.png" alt="Image 1">
+            <p>
+                近期冲突<br />2023年1月26日，以色列军方在约旦河西岸北部城市杰宁与巴勒斯坦人发生冲突，导致至少9名巴勒斯坦人死亡、20人受伤。这是20余年来以军在约旦河西岸致死人数最多的单次行动。美国政府宣布国务卿安东尼·布林肯本周末起访问中东。3月31日，据路透社报道，伊朗伊斯兰革命卫队（IRGC）表示，以色列在3月31日叙利亚发动的空袭导致该卫队的一名军官死亡。
+                <br /><br />2023年4月5日，以色列警方与巴勒斯坦民众在耶路撒冷老城阿克萨清真寺爆发冲突以来，巴以局势持续紧张，双方在加沙地带、约旦河西岸和耶路撒冷等地接连爆发武装冲突，造成巨大伤亡。6月19日，以军20年来第一次在约旦河西岸使用武装直升机进行空袭，造成6名巴勒斯坦人死亡、90多人受伤。6月21日，以军自2005年以来第一次在约旦河西岸利用无人机搞暗杀，3名据称是“恐怖分子”的巴勒斯坦人被定点清除。截至7月14日，2023年已经有至少190名巴勒斯坦人、26名以色列人在冲突中丧生。
+                <br /><br />2023年10月7日，巴勒斯坦伊斯兰抵抗运动（哈马斯）宣布对以色列采取代号“阿克萨洪水”的军事行动，并表示已向以色列境内发射了至少5000枚火箭弹。以色列随即宣布进入战争状态，对加沙地带哈马斯目标发起代号“铁剑”的行动
+                
+            </p>
+        </div>
+    </div>
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <h2>印巴战争</h2>
+            <img src="../实时战争资料/印巴战争/1.png" alt="Image 1">
+            <p>
+                第一次印巴战争
+                <br />是印度、巴基斯坦双方关于克什米尔地区分治问题而引发的战争。1947年8月，印度、巴基斯坦分治时，蒙巴顿方案规定让克什米尔人自由选择归并印、巴一方或宣布独立。印度利用其分治时控制的克什米尔议会通过决议，宣布该地区归属印度。同年10月27日，印度和巴基斯坦在克什米尔地区爆发了第一次战争。
+                <br /><br />印度参战部队有2个师及若干土邦部队约40000余人，巴基斯坦参战的多为部落武装约5万人。印、巴军队经过1年多的争夺战，双方伤亡惨重，胜负难分，后在联合国干预下于1949年1月停火。印度方面控制了克什米尔地区三分之二的土地和四分之三的人口，其余为巴方控制。这次战争没有解决克什米尔归属问题。
+            </p>
+            <img src="../实时战争资料/印巴战争/3.png" alt="Image 1">
+            <p>
+                第二次印巴战争
+                <br />第一次印巴战争的结束，只不过是双方暂时实现了停火。到了1965年，积压于印巴两国的恨毒怨火再次喷发出来，印度和巴基斯坦为争夺“克什米尔”再动干戈。
+                <br /><br />1965年9月20日，在联合国的调停下，印度和巴基斯坦于9月23日同时宣布：接受联合国的调停，印、巴双正式停火。
+                <br /><br />1966年1月4日至9日，在苏联政府的斡旋下，印巴两国同意撤退到1965年8月5日前所在地区，印巴双方签署《塔什干宣言》。第二次印巴战争就此结束。
+            </p>
+            <img src="../实时战争资料/印巴战争/5.png" alt="Image 1">
+            <p>
+                第三次印巴战争：
+                <br />1971年11月21日，印度利用东巴基斯坦发生动乱的局势，利用和苏联结盟来牵制巴基斯坦的盟友美国和中国，向孟加拉地区发动大规模突然袭击，并成功占领该地区并扶植自治政府，最终将独立的巴基斯坦国家肢解为巴基斯坦和孟加拉国两部分，实现了在南亚称霸的目标。
+                <br /><br />战争期间，印度与巴基斯坦的军队在东部和西部战场交战。当东巴基斯坦（今孟加拉国）的巴基斯坦军队在1971年12月16日投降时，战争在实质上结束，孟加拉亦脱离巴基斯坦成为一个独立国家。在东巴基斯坦，约9万名巴国武装部队人员，包括准军事人员成为战俘。在联合国的干预下，印巴双方于1971年12月17日实现停火。
+            </p>
+        </div>
+    </div>
+    <div id="modal4" class="modal">
+        <div class="modal-content">
+            <h2>伊拉克战争</h2>
+            <P>
+            <img src="../实时战争资料/内战/内战/伊拉克/1.png" alt="Image 1">
+            <img src="../实时战争资料/内战/内战/伊拉克/2.png" alt="Image 1">
+            </P>
+            <p>
+                <br />海湾战争（Gulf War）
+                <br /><br />是美国领导的联盟军队于20世纪90年代，为恢复科威特主权、独立与领土完整并恢复其合法政权而对伊拉克进行的一场战争。
+                <br /><br />海湾战争包括3个主要军事行动：沙漠盾牌行动、沙漠风暴行动和海上拦截行动。联盟军队以较小的代价取得决定性胜利，重创伊拉克军队。1991年2月27日，美国宣布解放科威特的战争结束并于当天午夜停火，伊拉克最终在4月接受了停火协议。
+            </p>
+            <P>
+                <img src="../实时战争资料/内战/内战/伊拉克/3.png" alt="Image 1">
+                <img src="../实时战争资料/内战/内战/伊拉克/4.png" alt="Image 1">
+                </P>
+            <P>
+                伊拉克战争
+                <br />是以英美军队为主的联合部队在2003年3月20日对伊拉克发动的军事行动，美国以伊拉克藏有大规模杀伤性武器并暗中支持恐怖分子为由，绕开联合国安理会，单方面对伊拉克实施军事打击。因为是海湾战争的延续，又称为第二次海湾战争。到2010年8月美国战斗部队撤出伊拉克为止，历时7年多，美方最终没有找到大规模杀伤性武器，反而以萨达姆政权早已销毁的文件和人证为由，结束了战争。2011年12月18日，美军全部撤出。2003年至2021年，约20.9万伊拉克平民死于战争和暴力冲突。
+            </P>
+            <P>
+                <img src="../实时战争资料/内战/内战/伊拉克/5.png" alt="Image 1">
+                <img src="../实时战争资料/内战/内战/伊拉克/6.png" alt="Image 1">
+                </P>
+            <p>
+                伊拉克战争战后
+                <br />伊拉克居民原本以为美国推翻了萨达姆政权，能够给他们带来更好的生活，没想到美国在对伊拉克社会进行了破坏之后并没有积极进行重建，承诺都成为了泡影。
+                <br /><br />在这样的情况下，伊拉克的反抗组织越来越多，有的甚至演变为了恐怖组织，如IS组织。这些恐怖组织严重破坏了伊拉克当地的治安，所制造的恐怖袭击也是对当地人民安全和正常生活造成了极大的威胁。
+            </p>
+        </div>
+    </div>
+    <div id="modal5" class="modal">
+        <div class="modal-content">
+            <h2>内战</h2>
+            <br /><br /><br /><br />
+            <h3>阿富汗内战</h3>
+            <img src="../实时战争资料/内战/内战/阿富汗/阿富汗首都喀布尔，塔利班统治下的当地街头.jpg" alt="Image 1">
+            <p>2021年8月，阿富汗局势画风突变。号称拥有30万大军的阿富汗政府军，在美军还没完全撤退时就崩盘，阿富汗塔利班不到10天进入了首都喀布尔，并很快将再次建立全国政权。
+
+                <br />一直以来，很多人都会因为某些事情，将塔利班定义为极端主义，甚至是恐怖组织。但这一次占领喀布尔之后，阿富汗塔利班的行事方式以及心态，似乎都已经发生巨大的转变，其不断发布的种种“开放”与“合作”的声明是想让全世界对其有全新的认识。
+                
+                <br />塔利班“建国”后，因为它的政权是打出来的，又实行政教合一制度，所以全世界只有巴基斯坦、阿联酋和沙特三个国家承认它是合法政府。
+                
+                <br />作为狂热的信徒，塔利班领导人按最严厉的规定约束自己，也约束老百姓。在塔利班统治下，妇女被禁止从事多数职业，外出必须蒙面，小偷要被砍手，通奸要被处死，流行音乐、电视和录像都被禁止。
+                </p>
+                <img src="../实时战争资料/内战/内战/阿富汗/832.jpg" alt="Image 1">
+                <p>
+                    2001年10月，阿富汗战争爆发，以美国为首的联军以反恐的名义进攻阿富汗，塔利班政府迅速垮台。
+
+                    <br />塔利班政权垮台后，剩余的塔利班势力逃入了阿富汗的山区。
+
+                    <br />利用游击战术，塔利班武装不但没有被消灭，反而“越剿越多，不断壮大”，颇令美军和北约部队尴尬。
+
+                    <br />2005年，塔利班卷土重来，仅仅用了两年，就占据了巴基斯坦和阿富汗的大部分边境。
+
+                    <br />2013年，塔利班在卡塔尔多哈开设和谈办公室，塔利班人员升起“阿富汗伊斯兰酋长国”旗帜。阿富汗塔利班坚持认为自己是阿富汗的合法政府，只是在外力干涉下被迫流亡。
+
+                    <br />2015年7月29日，阿富汗国家安全局证实，塔利班武装组织最高领导人毛拉·穆罕默德·奥马尔已于两年多前在巴基斯坦一家医院死亡。
+
+                    <br />2016年5月21日，美国国防部说，美军对阿富汗塔利班武装领导人阿赫塔尔·穆罕默德·曼苏尔实施了定点清除行动。曼苏尔原为阿富汗塔利班前领导人毛拉·穆罕默德·奥马尔的副手，2015年7月31日接替因病去世的奥马尔正式成为该组织新领导人。
+                </p>
+                <img src="../实时战争资料/内战/内战/阿富汗/835.jpg" alt="Image 1">
+                <p>
+                    2018年，美国计划加快从阿富汗撤军、准备与塔利班谈判，被视为最合适谈判人选的巴拉达尔获释。从2019年到2020年，在卡塔尔多哈与美国谈判期间，巴拉达尔是塔利班的主要代表。据称，巴拉达尔话不多、表现克制，但难以捉摸。而当谈判陷入僵局时，巴拉达尔是能打破僵局的人。
+                </p>
+                <br />
+                <h3>
+                    缅甸内战
+                </h3>
+                <img src="../实时战争资料/内战/内战/缅甸/v2-d488a2582d3a23eab2ed25392df569ff_r.jpg" alt="Image 1">
+                <p>
+                    缅甸内战始自1960年，军事强人尼温夺取政权，建立军事独裁，否决少数民族的 自决权 ，开始缅甸化 同化政策 。 致使缅甸陷入50多年的内战，截止2016年仍未止歇。 由于缅甸的变革持续推进， 缅甸政府军 和少数民族武装 克钦独立军 的停火谈判问题日益突出。
+                    <br />缅甸除了缅甸政府（缅甸政府军），缅甸境内还有十几股军阀，他们各自独立并各自管理着自己的地盘。其中军阀拥有的军队人数较多的前八个，（人数由多到少排名）分别是佤邦联合军、克钦独立军、南掸邦军、北掸邦军、克伦民族解放军、德昂民族解放军、掸邦东部民族民主同盟军、缅甸民族民主同盟军。
+                </p>
+                <br />
+                <h3>
+                    叙利亚内战
+                </h3>
+                <P>
+                    <img src="../实时战争资料/内战/内战/叙利亚/1.png" alt="Image 1">
+                    <img src="../实时战争资料/内战/内战/叙利亚/2.png" alt="Image 1">
+                    </P>
+                <p>
+                <p>
+                    叙利亚内战
+                    <br />指从2011年年初持续的叙利亚政府与叙利亚反对派组织、伊斯兰国之间的冲突。叙利亚的反政府示威活动于2011年1月26日开始并于3月15日升级，随后反政府示威活动演变成了武装冲突。
+                    <br /><br />阿拉伯之春爆发后，叙利亚反对派要求总统巴沙尔·阿萨德下台，巴沙尔·阿萨德同意通过和谈解决叙利亚国内的矛盾，但遭到叙利亚反对派的拒绝。叙利亚反对派发动对叙利亚武装部队及亲政府的民兵组织的恐怖袭击，特别是在德拉、霍姆斯、伊德利卜和哈马等抗议的中心地区。
+                    <br /><br />叙利亚国内冲突一直持续。联合国称叙利亚政府军及叙利亚反对派均犯下了包括谋杀、法外处决、酷刑等侵犯人权等行为在内的战争罪行。
+                </p>
+                <br /><br />
+                <p>
+                    其余内战概述：
+                    <br />现在世界上仍然存在一些内战国家，主要集中在非洲和中东地区，例如利比亚、叙利亚、也门、埃塞俄比亚、索马里、阿富汗、黎巴嫩、伊拉克、苏丹、巴勒斯坦等。此外，一些国家如缅甸、菲律宾、泰国、巴基斯坦、印度等存在反叛组织的活动。英国北爱尔兰地区也曾有反叛组织活动，但现在情况已有所改善。朝鲜和韩国虽然未正式进入内战状态，但两国之间存在分裂和紧张关系。
+                    <br />这些内战和冲突的原因多种多样，包括政治、民族、宗教、资源等方面的因素。这些冲突给相关国家的人民带来了巨大的痛苦和损失，并对国际和平与安全构成挑战。国际社会，包括联合国和其他国际组织，在不同程度上参与了冲突调解和和平建设努力。
+                </p>
+        </div>
+    </div>
+    <div id="modal6" class="modal">
+        <div class="modal-content">
+            <h2>毒品战争</h2>
+            <img src="../实时战争资料/毒品战争/毒品战争/6427c964356648548c6b7a7900b31fc1.jpg" alt="Image 1">
+
+            <p>"毒品战争" <br />
+                这一术语通常指的是一个国家内部为打击非法毒品生产、分发和使用所采取的一系列政策和行动。
+                这个概念最早起源于美国，在1971年由时任美国总统理查德·尼克松提出，将打击毒品滥用作为联邦政府的优先事项。自那时起，许多国家都开展了各自的"毒品战争"，这些战争通常包括立法、执法、教育和预防措施等多个方面。
+
+                美国：美国的"毒品战争"是其国内一项持续数十年的执法行动，旨在减少非法药物的使用和流通。这包括对墨西哥边境的强化监控、对国内毒品市场的打击以及对国际贩毒组织的追捕和破坏。美国在这一领域的投入巨大，不仅包括执法成本，还包括医疗、社会服务和监狱系统等方面的开支。
+                
+                墨西哥：墨西哥的"毒品战争"主要是指该国政府与墨西哥毒品cartels（墨西哥毒品集团）之间的冲突。这场战争在2006年墨西哥总统费利佩·卡尔德龙·伊涅斯塔发起一项名为"无畏之战"的行动后达到高潮。这场战争导致了大量无辜民众的死亡，同时也引发了关于毒品政策的人权和社会稳定问题的广泛讨论。
+                
+                哥伦比亚：哥伦比亚也是长期遭受毒品问题困扰的国家之一。在其内部，政府与FARC（哥伦比亚革命武装力量）等反政府武装组织进行了长期的冲突，其中一部分涉及毒品贸易。美国曾提供大量军事援助给哥伦比亚以帮助其打击毒品生产和贩运。
+                
+                菲律宾：菲律宾的"毒品战争"是由现任总统罗德里戈·杜特尔特发起的一项政策，他上任后承诺严厉打击毒品犯罪。这一政策包括对涉嫌毒品犯罪的个人进行立即逮捕和审判，有时甚至无需经过正式的司法程序。这一政策在国内外引起了广泛关注和争议，人权组织对其中的法外处决和侵犯人权行为提出了批评。
+                
+                这些国家的"毒品战争"展现了不同国家在面对毒品问题时的不同策略和挑战。尽管这些战争的动机和目标相似，但实施方式和结果却各有不同，同时也伴随着各自的社会、政治和经济问题。
+                </p>
+                <p>
+                    涉及国家<br />墨西哥：墨西哥的"毒品战争"主要是指该国政府与墨西哥毒品cartels（墨西哥毒品集团）之间的冲突。这场战争在2006年墨西哥总统费利佩·卡尔德龙·伊涅斯塔发起一项名为"无畏之战"的行动后达到高潮。这场战争导致了大量无辜民众的死亡，同时也引发了关于毒品政策的人权和社会稳定问题的广泛讨论。
+                </p>
+                <img src="../实时战争资料/毒品战争/毒品战争/7b6a01199b2c49e999f8997b3c312750.jpg" alt="Image 1">
+                <p>
+                    哥伦比亚：哥伦比亚也是长期遭受毒品问题困扰的国家之一。在其内部，政府与FARC（哥伦比亚革命武装力量）等反政府武装组织进行了长期的冲突，其中一部分涉及毒品贸易。美国曾提供大量军事援助给哥伦比亚以帮助其打击毒品生产和贩运。
+                </p>
+                <img src="../实时战争资料/毒品战争/毒品战争/t01658b34abd76b447c.jpg" alt="Image 1">
+                <p>
+                    <br /><br />
+                    这些国家的"毒品战争"展现了不同国家在面对毒品问题时的不同策略和挑战。尽管这些战争的动机和目标相似，但实施方式和结果却各有不同，同时也伴随着各自的社会、政治和经济问题。
+                </p>
+        </div>
+    </div>
+    <div id="overlay" style="display: none;"></div>
+    </div>
+    <div id="788a058896e54070bf69282c26607bff" style="width:100vw; height:100vh;"></div>
+
+    <!-- 图表初始化和配置脚本 -->
+    <script>
+        // 创建一个canvas元素
+        var canvas_788a058896e54070bf69282c26607bff = document.createElement('canvas');
+        // 使用ECharts初始化这个canvas元素
+        var mapChart_788a058896e54070bf69282c26607bff = echarts.init(
+            canvas_788a058896e54070bf69282c26607bff, 'chalk', { width: 4096, height: 2048, renderer: 'canvas' });        // 定义地图的配置项
+        var mapOption_788a058896e54070bf69282c26607bff = {
+            "backgroundColor": "#00BFFF", // 背景颜色
+            "animation": true, // 开启动画效果
+            // 其他动画和样式相关配置
+            "animationThreshold": 2000,
+            "animationDuration": 1000,
+            "animationEasing": "cubicOut",
+            "animationDelay": 0,
+            "animationDurationUpdate": 300,
+            "animationEasingUpdate": "cubicOut",
+            "animationDelayUpdate": 0,
+            "aria": {
+                "enabled": false
+            },
+            "series": [
+                {
+                    "type": "map", // 图表类型为地图
+                    "name": "today_confirm", // 系列名称
+                    "map": "world", // 使用世界地图
+                    // 数据数组
+                    "data": [
+                        {
+                            "name": "Ukraine",
+                            "value": 100
+                        },
+                        {
+                            "name": "Russia",
+                            "value": 100
+                        },
+                        {
+                            "name": "Israel",
+                            "value": 100
+                        },
+                        {
+                            "name": "Palestine",
+                            "value": 100
+                        },
+                        {
+                            "name": "Afghanistan",
+                            "value": 2000
+                        },
+                        {
+                            "name": "Syria",
+                            "value": 2000
+                        },
+                        {
+                            "name": "Myanmar",
+                            "value": 2000
+                        },
+                        {
+                            "name": "Yemen",
+                            "value": 2000
+                        },
+                        {
+                            "name": "Somalia",
+                            "value": 2000
+                        },
+                        {
+                            "name": "Mali",
+                            "value": 2000
+                        },
+                        {
+                            "name": "Libya",
+                            "value": 2000
+                        },
+                        {
+                            "name": "Ethiopia",
+                            "value": 2000
+                        },
+                        {
+                            "name": "Central African Rep.",
+                            "value": 2000
+                        },
+                        {
+                            "name": "S. Sudan",
+                            "value": 30000
+                        },
+                        {
+                            "name": "Mexico",
+                            "value": 400000
+                        },
+                        {
+                            "name": "Colombia",
+                            "value": 400000
+                        },
+                        {
+                            "name": "Uganda",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Tunisia",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Togo",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Tanzania",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Sudan",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Nigeria ",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Niger",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Mauritania",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Cote d'Ivoire",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Iraq",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Ghana",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Congo",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Chad",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Hamelon",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Burkina Faso",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Algeria",
+                            "value": 5000000
+                        },
+                        {
+                            "name": "Yemen",
+                            "value": 500
+                        },
+                        {
+                            "name": "Iran",
+                            "value": 500
+                        }
+                    ],                    // 地图相关样式和设置
+                    "roam": false,
+                    "aspectScale": 0.75,
+                    "nameProperty": "name",
+                    "selectedMode": false,
+                    "zoom": 1,
+                    "zlevel": 0,
+                    "z": 2,
+                    "seriesLayoutBy": "column",
+                    "datasetIndex": 0,
+                    "mapValueCalculation": "sum",
+                    "showLegendSymbol": false,
+                    "itemStyle": {
+                        "normal": {
+                            "areaColor": "#00920d",
+                            "borderColor": "black"
+                        }
+                    },
+                    "emphasis": {},
+                    "rippleEffect": {
+                        "show": true,
+                        "brushType": "stroke",
+                        "scale": 2.5,
+                        "period": 4
+                    }
+                }
+            ],
+            // 其他配置，如工具提示、图例、视觉映射组件等
+            "legend": [
+                {
+                    "data": [
+                        "today_confirm"
+                    ],
+                    "selected": {},
+                    "selectedMode": "single",
+                    "show": true,
+                    "top": "6%",
+                    "padding": 5,
+                    "itemGap": 10,
+                    "itemWidth": 25,
+                    "itemHeight": 14,
+                    "textStyle": {
+                        "color": "black"
+                    },
+                    "backgroundColor": "transparent",
+                    "borderColor": "#ccc",
+                    "borderWidth": 1,
+                    "borderRadius": 0,
+                    "pageButtonItemGap": 5,
+                    "pageButtonPosition": "end",
+                    "pageFormatter": "{current}/{total}",
+                    "pageIconColor": "#2f4554",
+                    "pageIconInactiveColor": "#aaa",
+                    "pageIconSize": 15,
+                    "animationDurationUpdate": 800,
+                    "selector": false,
+                    "selectorPosition": "auto",
+                    "selectorItemGap": 7,
+                    "selectorButtonGap": 10
+                }
+            ],
+            "tooltip": {
+                "show": true,
+                "trigger": "item",
+                "triggerOn": "mousemove|click",
+                "axisPointer": {
+                    "type": "line"
+                },
+                "showContent": true,
+                "alwaysShowContent": false,
+                "showDelay": 0,
+                "hideDelay": 100,
+                "enterable": false,
+                "confine": false,
+                "appendToBody": false,
+                "transitionDuration": 0.4,
+                "textStyle": {
+                    "fontSize": 14
+                },
+                "borderWidth": 0,
+                "padding": 5,
+                "order": "seriesAsc"
+            },
+            "title": [
+                {
+                    "show": true,
+                    "text": "World epidemic information",
+                    "target": "blank",
+                    "subtarget": "blank",
+                    "left": "center",
+                    "padding": 5,
+                    "itemGap": 10,
+                    "textAlign": "auto",
+                    "textVerticalAlign": "auto",
+                    "triggerEvent": false,
+                    "subtextStyle": {
+                        "color": "cyan",
+                        "fontFamily": "KaiTi",
+                        "fontSize": 16
+                    }
+                }
+            ],
+            "visualMap": {
+                "show": true,
+                "type": "piecewise",
+                "min": 0,
+                "max": 1000000,
+                "inRange": {
+                    "color": [
+                        "#50a3ba",
+                        "#eac763",
+                        "#d94e5d"
+                    ]
+                },
+                "calculable": true,
+                "inverse": false,
+                "splitNumber": 5,
+                "hoverLink": true,
+                "orient": "vertical",
+                "padding": 5,
+                "showLabel": true,
+                "itemWidth": 20,
+                "itemHeight": 14,
+                "borderWidth": 0,
+                "pieces": [
+                    {
+                        "min": 10000000
+                    },
+                    {
+                        "min": 1000000,
+                        "max": 9999999,
+                        "color": "#c05700"
+                    },
+                    {
+                        "min": 100000,
+                        "max": 999999,
+                        "color": "#a757bc"
+                    },
+                    {
+                        "min": 10000,
+                        "max": 99999,
+                        "color": "#c05700"
+                    },
+                    {
+                        "min": 1000,
+                        "max": 9999,
+                        "color": "#c05700"
+                    },
+                    {
+                        "min": 0,
+                        "max": 999,
+                        "color": "#df2e00"
+                    }
+                ]
+            }
+        };
+        // 将配置项设置到地图实例上
+        mapChart_788a058896e54070bf69282c26607bff.setOption(mapOption_788a058896e54070bf69282c26607bff);        // 再次使用ECharts初始化图表，创建一个全球图表
+        var chart_788a058896e54070bf69282c26607bff = echarts.init(
+            document.getElementById('788a058896e54070bf69282c26607bff'), 'chalk', { renderer: 'canvas' });
+        var options_788a058896e54070bf69282c26607bff = {
+            "globe": {
+                "show": true, // 显示地球
+                "baseTexture": mapChart_788a058896e54070bf69282c26607bff, // 地球的基础纹理
+                // 光照和着色等设置
+                // shading: 'lambert',
+                // light: {
+                //     ambient: {
+                //         intensity: 0.6
+                //     },
+                //     main: {
+                //         intensity: 0.2
+                //     }
+                // }  
+            }
+        };
+        // 应用配置，生成全球图表
+        chart_788a058896e54070bf69282c26607bff.setOption(options_788a058896e54070bf69282c26607bff);
+    </script>
+    <script>
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                const targetId = card.getAttribute('data-target');
+                const modal = document.getElementById(targetId);
+                const overlay = document.getElementById('overlay');
+
+                modal.style.display = 'block';
+                overlay.style.display = 'block';
+
+                overlay.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    overlay.style.display = 'none';
+                });
+            });
+        });
+        // script.js
+        // document.getElementById('openVideoBtn').addEventListener('click', function () {
+        //     document.getElementById('overlay').style.display = 'block';
+        //     document.getElementById('videoContainer').style.display = 'block';
+        // });
+
+        // document.getElementById('closeVideoBtn').addEventListener('click', function () {
+        //     document.getElementById('overlay').style.display = 'none';
+        //     document.getElementById('videoContainer').style.display = 'none';
+        // });
+
+    </script>
+</body>
+
+</html>

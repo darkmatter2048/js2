@@ -1,0 +1,105 @@
+* {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-decoration: none;
+}
+@font-face {
+    font-family: 'font';
+    src: url(../font/xiangcuikesong.ttf);
+}
+  /* -------video---------- */
+  #videoContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80vw;
+    height: 80vh;
+    z-index: 9999999;
+    background-image: url(../img/1.jpg);
+    background-size: cover;
+}
+
+#closeVideoBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 50px;
+    border: 3px solid #fff;
+    color: #fff;
+}
+
+#openVideoBtn {
+    z-index: 99999;
+    position: absolute;
+    right: 30px;
+    overflow: hidden;
+    top: 120px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+
+}
+
+#openVideoBtn img {
+    width: 180%;
+    height: 115%;
+    transform: translate(-40px, -7px);
+}
+
+#videoPlayer {
+    width: 100%;
+    height: 100%;
+}
+
+/* nav */
+nav {
+    width: 30%;
+    height: 80px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    z-index: 9999;
+    background-image: url(../img/nav.png);
+    background-size: cover;
+    background-position-y: -60px;
+}
+
+nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+
+}
+
+nav ul li {
+    text-align: center;
+    line-height: 80px;
+
+    transform: translateY(-10px);
+}
+
+.iconfont {
+    color: #038FEA;
+    font-size: 26px;
+    font-weight: 900;
+}
+
+nav ul li a {
+    font-size: 20px;
+    color: #038FEA;
+    font-weight: 900;
+}

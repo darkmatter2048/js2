@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="../../font/iconfont.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900'); 
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image:url("images/13.jpg");
+}
+
+.card {
+  position: relative;
+  width: 350px;
+  height: 190px;
+  /* height: 450px; */
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.15);
+  transition: 0.5s;
+}
+
+.card:hover {
+  height: 450px;
+}
+
+.imgBx {
+  position: absolute;
+  left: 50%;
+  top: -20px;
+  transform: translateX(-50%);
+  width: 250px;
+  height: 150px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.card:hover .imgBx {
+  width: 300px;
+  height: 200px;
+}
+
+.imgBx img{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card .content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.card .content .details {
+  padding: 40px;
+  text-align: center;
+  width: 100%;
+  transition: 0.5s;
+  transform: translateY(150px);
+}
+
+.card:hover .content .details {
+  transform: translateY(0px);
+}
+
+.card .content .details h2 {
+  font-size: 1.25em;
+  font-weight: 600;
+  color: #555;
+  line-height: 1.2em;
+}
+
+.card .content .details h2 span {
+  font-size: 0.75em;
+  font-weight: 500;
+  opacity: 0.5;
+}
+
+.card .content .details .data {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.card .content .details .data h3 {
+  font-size: 1em;
+  color: #555;
+  line-height: 1.2em;
+  font-weight: 600;
+}
+
+.card .content .details .data h3 span {
+  font-size: 0.85em;
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+.card .content .details .actionBtn {
+  position: absolute;
+  left: 70%;
+  display:contents;
+  justify-content: space-between;
+}
+
+.card .content .details .actionBtn button {
+  position:absolute;
+  left:16%;
+  top:80%;
+  padding: 10px 11px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  font-weight: 500;
+  background: #1886d0;
+  color: #fff;
+  cursor: pointer;
+}
+
+.card .content .details .actionBtn1 button {
+  position:absolute;
+  left:57%;
+  top:80%;
+  padding: 10px 25px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  font-weight: 500;
+  background: #ff5f95;
+  color: #fff;
+  cursor: pointer;
+}
+
+.card .content .details .actionBtn button:nth-child(2) {
+  border: 1px solid #999;
+  color: #999;
+  background: #fff;
+}
+.head {
+color: #f1f1f1;
+position: absolute;
+top:5%;
+left: 41%;
+}
+
+/* nav */
+nav {
+    width: 30%;
+    height: 80px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    z-index: 9999;
+    background-image: url(../../img/nav.png);
+    background-size: cover;
+    background-position-y: -60px;
+}
+
+nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+
+}
+
+nav ul li {
+    text-align: center;
+    line-height: 80px;
+	list-style-type: none;
+    transform: translateY(-10px);
+}
+
+.iconfont {
+    color: #ec821e;
+    font-size: 26px;
+    font-weight: 900;
+}
+
+nav ul li a {
+    font-size: 20px;
+    color: #ec821e;
+    font-weight: 900;
+	text-decoration: none;
+}
+  </style>
+ 
+  <title>Animated Profile Card</title>
+</head>
+<h1 class="head">中国维和部队简介</h1>
+<body>
+  <nav>
+    <ul>
+      <li><i class="iconfont icon-wxbzhuye"></i><a href="../../index.html">首页</a></li>
+      <li><i class="iconfont icon-diqiu"></i><a href="../../前端/实时战争.html">实时战争</a></li>
+      <li><i class="iconfont icon-yiliaofuwu"></i><a href="../Flip Blockbook.js/book.html">援助统计</a></li>
+      <li><i class="iconfont icon-li_skull"></i><a href="../../前端/死亡数据.html">死亡情况</a></li>
+    </ul>
+  </nav>
+    <div class="card">
+        <div class="imgBx">
+          <img src="./images/1.jpg">
+        </div>
+        <div class="content">
+          <div class="details">
+            <h2>创立阶段<br><span>1990.04-2002.02</span></h2>
+            <div class="data">
+              1990年4月，中国向联合国停战监督组织派出5名军事观察员，这是中国军队开始参与联合国维和行动的历史见证。
+            </div>
+          </div>
+        </div>
+      </div>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <div class="card">
+    <div class="imgBx">
+      <img src="./images/2.jpg">
+    </div>
+    <div class="content">
+      <div class="details">
+        <h2>发展阶段<br><span>2002.03-2016.12</span></h2>
+        <div class="data">
+          在这十几年间里，中国维和部队实现出兵规模从小到大、部队类型从单一到多样、任务类型从支援保障向综合多能的跨越发展。
+        </div>
+      </div>
+    </div>
+  </div>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <div class="card">
+    <div class="imgBx">
+      <img src="./images/3.jpg">
+    </div>
+    <div class="content">
+      <div class="details">
+        <h2>成熟阶段<br><span>2017.01至今</span></h2>
+        <div class="data">
+          2017年1月，习近平主席发表题为《共同构建人类命运共同体》的主旨演讲,为维护世界和平、构建人类命运共同体贡献的中国智慧。
+        </div>
+        <div class="actionBtn1">
+          <a href="https://app.unv.org/?country=CHN&language=LAN_CHI&type=online" title="You can become a UN online volunteer by clicking here."><button>Sign up</button></a>
+        </div>
+        <div class="actionBtn">
+          <a href="http://www.mod.gov.cn/gfbw/jsxd/wh/index.html" title="Get More information by clicking here."><button>Read more</button></a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

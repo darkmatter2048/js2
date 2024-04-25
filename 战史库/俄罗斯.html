@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // 监听整个文档的点击事件
+        document.addEventListener('click', function(event) {
+            // 检查点击事件是否发生在document之外
+            if (event.target === document) {
+                // 如果点击空白处，跳转回主页
+                window.location.href = 'C:/Users/user/Desktop/战争与和平/第一模块.html'; // 主页的URL
+            }
+        });
+        </script>
+    <title>俄罗斯战史库</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .shell {
+            width: 100%;
+            position: relative;
+            padding: 80px 0;
+            transition: 0.3s ease 0s;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .shell:before {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(99, 99, 99, 0.8);
+            content: "";
+        }
+
+        .header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .title {
+            color: #fff;
+            font-size: 46px;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .timeline {
+            display: flex;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            flex-direction: column;
+            max-width: 700px;
+            position: relative;
+        }
+
+        .content-title {
+            font-weight: normal;
+            font-size: 66px;
+            margin: -10px 0 0 0;
+            transition: 0.4s;
+            padding: 0 10px;
+            box-sizing: border-box;
+            color: #fff;
+        }
+
+        .content-desc {
+            margin: 0;
+            font-size: 15px;
+            box-sizing: border-box;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 25px;
+        }
+
+        .timeline:before {
+            position: absolute;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            margin-left: -1px;
+            content: "";
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .item {
+            padding: 40px 0;
+            opacity: 0.3;
+            filter: blur(2px);
+            transition: 0.5s;
+            box-sizing: border-box;
+            width: calc(50% - 40px);
+            display: flex;
+            position: relative;
+            transform: translateY(-80px);
+        }
+
+        .item:before {
+            content: attr(data-text);
+            letter-spacing: 3px;
+            width: 100%;
+            position: absolute;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            border-left: 2px solid rgba(255, 255, 255, 0.5);
+            top: 70%;
+            margin-top: -5px;
+            padding-left: 15px;
+            opacity: 0;
+            right: calc(-100% - 56px);
+            font: 900 20px '';
+            letter-spacing: 5px;
+        }
+
+        .item:nth-child(even) {
+            align-self: flex-end;
+        }
+
+        .item:nth-child(even):before {
+            right: auto;
+            text-align: right;
+            left: calc(-100% - 56px);
+            padding-left: 0;
+            border-left: none;
+            border-right: 2px solid rgba(255, 255, 255, 0.5);
+            padding-right: 15px;
+        }
+
+        .item--active {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0px);
+        }
+
+        .item--active:before {
+            top: 50%;
+            transition: 0.3s all 0.2s;
+            opacity: 1;
+        }
+
+        .item--active .content-title {
+            margin: -50px 0 20px 0;
+        }
+
+        .img {
+            max-width: 100%;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 16px;
+            letter-spacing: 5px;
+            margin: 10px 0 0 0;
+            font-weight: normal;
+        }
+
+        .footer {
+            padding: 95px 0;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #999;
+            display: inline-block;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .item {
+                align-self: baseline !important;
+                width: 100%;
+                padding: 0 30px 150px 80px;
+            }
+
+            .item:before {
+                left: 10px !important;
+                padding: 0 !important;
+                top: 50px;
+                text-align: center !important;
+                width: 60px;
+                border: none !important;
+            }
+
+            .item:last-child {
+                padding-bottom: 40px;
+            }
+        }
+
+        @media only screen and (max-width: 767px) {
+            .timeline:before {
+                left: 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../前端/死亡数据.html" style="text-decoration: none;">
+    <div class="shell" id="shell">
+        <div class="header">
+            <h2 class="title" style="color: rgb(255, 38, 0);">俄罗斯战史库</h2>
+            <h3 class="subtitle" style="color: rgb(253, 118, 8);">1992-2022</h3>
+        </div>
+        <div class="timeline">
+            <div class="item" data-text="阿布哈兹战争">
+                <div class="content">
+                    <img src="./照片/俄罗斯/1.png" alt="" class="img">
+                    <h2 class="content-title">1992</h2>
+                    <p class="content-desc">
+                        发生于1992年8月14日至1993年9月27日。战争是由格鲁吉亚政府军与阿布哈兹地方武装、俄罗斯武装部队的战争。冲突各方共伤亡8000人。
+                    </p>
+                </div>
+            </div>
+
+            <div class="item" data-text="第一次车臣战争">
+                <div class="content">
+                    <img src="./照片/俄罗斯/2.png" alt="" class="img">
+                    <h2 class="content-title">1994</h2>
+                    <p class="content-desc">
+                        爆发于1994年12月11日，1996年8月31日停火，车臣获得非正式的独立地位。根据官方数字，俄军死亡人数为3826人，伤者17892人，另有1906人失踪。此外，这次战争亦导致超过10万平民死亡。
+                    </p>
+                </div>
+            </div>
+
+            <div class="item" data-text="第二次车臣战争" >
+                <div class="content">
+                    <img src="./照片/俄罗斯/3.png" alt="" class="img">
+                    <h2 class="content-title">1999</h2>
+                    <p class="content-desc">
+                        爆发于1999年8月，2000年2月28日俄罗斯控制了绝大部分车臣土地，获得胜利。俄军以阵亡官兵一千一百七十三人的代价，击毙叛军约一万人，取得了战争的全面胜利。
+                    </p>
+                </div>
+            </div>
+
+            <div class="item" data-text="俄罗斯-格鲁吉亚战争" >
+                <div class="content">
+                    <img src="./照片/俄罗斯/4.png" alt="" class="img">
+                    <h2 class="content-title">2008</h2>
+                    <p class="content-desc">
+                        2008年8月8日至2008年8月18日，格鲁吉亚和俄罗斯为了争夺南奥塞梯的控制权而爆发的战争。共造成格鲁吉亚军队215人死亡，1469人受伤，4人失踪；俄罗斯军队74人死亡，171人负伤，19人失踪。
+                    </p>
+                </div>
+            </div>
+
+            <div class="item" data-text="俄乌冲突">
+                <div class="content">
+                    <img src="./照片/俄罗斯/5.png" alt="" class="img">
+                    <h2 class="content-title">2022</h2>
+                    <p class="content-desc">
+                        时间：2022年2月17日以来俄罗斯和乌克兰两国发生的局势冲突，并一直持续至今。其中乌克兰的伤亡人数在12.45万到13.1万人之间，而俄罗斯的伤亡人数在18.95到22.3万人之间
+                    </p>
+                </div>
+            </div>
+
+            <div class="item" data-text="">
+                <div class="content">
+                    <img src="" alt="" class="img">
+                    <h2 class="content-title"></h2>
+                    <p class="content-desc">
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </a>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+
+        (function ($) {
+            $.fn.timeline = function () {
+                var selectors = {
+                    id: $(this),
+                    item: $(this).find(".item"),
+                    activeClass: "item--active",
+                    img: ".img"
+                };
+                // 将第一个时间轴项目激活，并设置时间轴背景图片为第一个项目的图片
+                selectors.item.eq(0).addClass(selectors.activeClass);
+                selectors.id.css(
+                    "background-image",
+                    "url(" +
+                    selectors.item.first()
+                        .find(selectors.img)
+                        .attr("src") +
+                    ")"
+                );
+                // 获取时间轴项目的总数
+                var itemLength = selectors.item.length;
+                // 当页面滚动时，触发滚动事件
+                $(window).scroll(function () {
+                    var max, min;
+                    // 获取页面滚动的距离
+                    var pos = $(this).scrollTop();
+                    selectors.item.each(function (i) {
+                        // 获取当前时间轴项目的最小和最大高度
+                        min = $(this).offset().top;
+                        max = $(this).height() + $(this).offset().top;
+                        var that = $(this);
+                        // 如果滚动到最后一个项目，并且超过了当前项目高度的一半，
+                        // 则将最后一个项目设置为激活状态，并设置背景图片为最后一个项目的图片
+                        if (i == itemLength - 2 && pos > min + $(this).height() / 2) {
+                            selectors.item.removeClass(selectors.activeClass);
+                            selectors.id.css(
+                                "background-image",
+                                "url(" +
+                                selectors.item.last()
+                                    .find(selectors.img)
+                                    .attr("src") +
+                                ")"
+                            );
+                            selectors.item.last().addClass(selectors.activeClass);
+                        }
+                        // 如果当前滚动位置在当前项目的最小和最大高度之间，
+                        // 则将当前项目设置为激活状态，并设置背景图片为当前项目的图片
+                        else if (pos <= max - 10 && pos >= min) {
+                            selectors.id.css(
+                                "background-image",
+                                "url(" +
+                                $(this)
+                                    .find(selectors.img)
+                                    .attr("src") +
+                                ")"
+                            );
+                            selectors.item.removeClass(selectors.activeClass);
+                            $(this).addClass(selectors.activeClass);
+                        }
+                    });
+                });
+            };
+        })(jQuery)
+        /*
+        最后，我们调用 timeline 插件并传入时间轴的 ID 作为参数。
+        这将启用时间轴插件并为该时间轴绑定滚动事件。
+        */
+       $("#shell").timeline();
+
+
+    </script>
+</body>
+
+</html>

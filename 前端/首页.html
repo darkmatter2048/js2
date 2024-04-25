@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" href="../css/all.css">
+    <style>
+        body {
+            background-image: url(../img/底图.jpg);
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        .logo {
+            position: absolute;
+            display: flex;
+            left: -500px;
+            top: 40px;
+            transition: left 1s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+
+        .logo span {
+            font: 900 120px 'font';
+            letter-spacing: 2px;
+            display: inline-block;
+            animation: jump 5s cubic-bezier(0.86, 0, 0.07, 1) forwards infinite;
+        }
+
+        @keyframes jump {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .logo span:nth-child(1),
+        .logo span:nth-child(2) {
+            color: rgb(215, 29, 29);
+        }
+
+        .logo span:nth-child(4),
+        .logo span:nth-child(5) {
+            color: rgb(29, 69, 215);
+
+        }
+
+        .content {
+            position: relative;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .content li {
+            position: absolute;
+            animation: flex 5s infinite;
+        }
+
+        @keyframes flex {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(20px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @property --bg-angle {
+            inherits: false;
+            initial-value: 0deg;
+            syntax: "<angle>";
+        }
+
+        @keyframes spin {
+            to {
+                --bg-angle: 360deg;
+            }
+        }
+
+        .tooltip {
+            position: absolute;
+            width: 300px;
+            height: 150px;
+            animation: spin 2.5s infinite linear paused;
+            background: linear-gradient(to bottom, oklch(0.1 0.2 240 / 0.95), oklch(0.1 0.2 240 / 0.95)) padding-box,
+                conic-gradient(from var(--bg-angle) in oklch longer hue, oklch(0.85 0.37 0) 0 0) border-box;
+            border: 6px solid transparent;
+            border-radius: 1rem;
+            box-shadow: 0.125rem 0.25rem 0.25rem 0.5rem oklch(0.1 0.37 315 / 0.25);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            transition: .3s;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0px;
+            opacity: 0;
+        }
+
+        .content li:hover .tooltip {
+            opacity: 1;
+            top: -150px;
+        }
+
+        .tooltip h2 {
+            margin-bottom: 10px;
+        }
+
+
+        .content li img {
+            width: 100%;
+        }
+
+        .no1 {
+            width: 30vw;
+            bottom: 5vh;
+            left: 10vw;
+        }
+
+        .no2 {
+            width: 15vw;
+            top: 20vh;
+            left: 40vw;
+        }
+
+        .no3 {
+            width: 15vw;
+            right: 10vw;
+            top: 10vh;
+            top: 0;
+        }
+
+        .no3 .tooltip {
+            top: 100px;
+
+        }
+
+        .content .no3:hover .tooltip {
+            opacity: 1;
+            top: 280px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="logo">
+            <span data-i="0">战</span>
+            <span data-i="1">争</span>
+            <span data-i="2">与</span>
+            <span data-i="3">和</span>
+            <span data-i="4">平</span>
+
+        </div>
+        <ul class="content">
+            <li class="no1">
+                <a href="实时战争.html">
+                    <img src="../img/第一模块.png" alt="">
+                </a>
+                <div class="tooltip">
+                    <h2>实时战争</h2>
+                    <span>此模块为目前世界上正在发生的实时战争的可视化</span>
+                </div>
+            </li>
+            <li class="no2">
+                <a href="死亡数据.html">
+                    <img src="../img/第二模块.png" alt="">
+                </a>   
+                <div class="tooltip">
+                    <h2>死亡情况</h2>
+                    <span>此模块主要是1989年以来世界上战争死亡人数的数据可视化展示</span>
+                </div>
+            </li>
+            <li class="no3">
+                <a href="../book/Flip Blockbook.js/book.html">
+                <img src="../img/第三模块.png" alt="">
+                <div class="tooltip">
+                    <h2>援助统计</h2>
+                    <span>此模块主要介绍了中国为世界维和做出的贡献</span>
+                </div>
+            </a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const logo = document.querySelector('.logo');
+        setTimeout(() => { logo.style.left = '100px'; }, 100);
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+        const logoSpans = document.querySelectorAll('.logo span');
+        logoSpans.forEach(span => {
+            const index = span.getAttribute('data-i');
+            const delay = index * 0.1; // Delay each character incrementally by 0.1s
+            span.style.animationDelay = `${delay}s`;
+        });
+
+        const logo = document.querySelector('.logo');
+        setTimeout(() => { logo.style.left = '100px'; }, 100);
+    });
+
+</script>
+
+</html>
